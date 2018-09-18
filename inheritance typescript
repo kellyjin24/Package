@@ -1,0 +1,621 @@
+Script started on Sun 06 Aug 2017 09:12:22 PM EDT
+]0;kljin@storm:~/cisc2000/labs/inheritance[kljin@storm inheritance]$ pwd
+/home/students/kljin/cisc2000/labs/inheritance
+]0;kljin@storm:~/cisc2000/labs/inheritance[kljin@storm inheritance]$ cat customer.cpp
+/* Program name: customer.cpp
+ * By: Kai Li Jin
+ * Date: August 6, 2017
+ * Description: This class interacts with the base class (package.cpp) through object composition. It prompts the user to enter his/her personal information.
+ */
+#include "customer.h"
+
+// Default constructor
+Customer::Customer() {
+	setFirst("XXXXX");
+	setMiddle('X');
+	setLast("XXXXX");
+}
+
+// Custom constructor
+Customer::Customer(string fname, char mname, string lname) {
+	setFirst(fname);
+	setMiddle(mname);
+	setLast(lname);
+}
+
+// Input method
+void Customer::input() {
+	string fname, lname, st, c, s;
+	char mname;
+	int hNum, z;
+
+	cout << endl;
+	cout << "----------Enter information----------" << endl;
+	cout << "Name (first, middle initial, last): ";
+	cin >> fname >> mname >> lname;
+
+	setFirst(fname);
+	setMiddle(mname);
+	setLast(lname);
+
+	cout << "House number: ";
+	cin >> hNum;
+	setHouseNum(hNum);
+	
+	cout << "Street: ";
+	cin.ignore();
+	getline(cin, st);
+	setStreet(st);
+
+	cout << "City: ";
+	getline(cin, c);
+	setCity(c);		
+
+	cout << "State: ";
+	getline(cin, s);
+	setState(s);
+
+	cout << "Zip code: ";
+	cin >> z;
+	setZip(z);
+}
+
+// Set method for first name
+void Customer::setFirst(string fname) {
+	firstName = fname;
+}
+
+// Set method for middle initial
+void Customer::setMiddle(char mname) {
+	middleName = mname;
+}
+
+// Set method for last name
+void Customer::setLast(string lname) {
+	lastName = lname;
+}
+
+// Get method for first name
+string Customer::getFirst() {
+	return firstName;
+}
+
+// Get method for middle initial
+char Customer::getMiddle() {
+	return middleName;
+}
+
+// Get method for last name
+string Customer::getLast() {
+	return lastName;
+}
+
+// Set method for house number
+void Customer::setHouseNum(int hNum) {
+	if (hNum > 0) {
+		houseNum = hNum;
+	}
+}
+
+// Get method for house number
+int Customer::getHouseNum() {
+	return houseNum;
+}
+
+// Set method for street
+void Customer::setStreet(string st) {
+	street = st;
+}
+
+// Get method for street
+string Customer::getStreet() {
+	return street;
+}
+
+// Set method for city
+void Customer::setCity(string c) {
+	city = c;
+}
+
+// Get method for city
+string Customer::getCity() {
+	return city;
+}
+
+// Set method for state
+void Customer::setState(string s) {
+	state = s;		
+}
+
+// Get method for state
+string Customer::getState() {
+	return state;
+}
+
+// Set method for zip code
+void Customer::setZip(int z) {
+	if (z >= 10000 && z <= 99999) {
+		zipCode = z;
+	}
+}
+
+// Get method for zip code
+int Customer::getZip() {
+	return zipCode;
+}
+
+// Display method
+void Customer::display() {
+	cout << endl;
+	cout << "----------Displaying personal information----------" << endl;
+	cout << "Name: " << getFirst() << " " << getMiddle() << ". " << getLast() << endl;
+	cout << "Address: " << getHouseNum() << " " << getStreet() << endl;
+	cout << getCity() << ", " << getState() << " " << getZip() << endl;	
+
+}
+]0;kljin@storm:~/cisc2000/labs/inheritance[kljin@storm inheritance]$ cat customer.h
+// Program name: customer.h
+#ifndef CUSTOMER_H
+#define CUSTOMER_H
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Customer {
+public:
+	Customer(); // Default Constructor
+	Customer(string, char, string); // Custom constructor
+	void input(); // Input method
+	void setFirst(string); // Set method for first name
+	void setMiddle(char); // Set method for middle initial
+	void setLast(string); // Set method for last name
+	string getFirst(); // Get method for first name
+	char getMiddle(); // Get method for middle initial
+	string getLast(); // Get method for last name
+	void setHouseNum(int); // Set method for house number
+	int getHouseNum(); // Get method for house number
+	void setStreet(string); // Set method for street
+	string getStreet(); // Get method for street
+	void setCity(string); // Set method for city
+	string getCity(); // Get method for city
+	void setState(string); // Set method for state
+	string getState(); // Get method for state
+	void setZip(int); // Set method for zip code
+	int getZip(); // Get method for zip code
+	void display(); // Display method
+
+private:
+	string firstName, lastName, street, city, state;
+	char middleName;
+	int houseNum, zipCode;
+};
+
+#endif
+]0;kljin@storm:~/cisc2000/labs/inheritance[kljin@storm inheritance]$ cat overnight.cpp
+/* Program name: overnight.cpp
+ * By: Kai Li Jin
+ * Date: August 6, 2017
+ * Description: This is a derived class from the base class (package.cpp). It adjusts the package cost by taking into account another fee per ounce for this type of shipment.
+ */
+#include "overnight.h"
+
+// Input method
+void Overnight::input() {
+	Package::input();
+}
+
+// Method to calculate overnight cost
+double Overnight::calculateCost() {
+	double cost;
+
+	cost = Package::calculateCost() * addFee;
+
+	return cost;
+}
+
+// Display method
+void Overnight::display() {
+	Package::display();
+	cout << "Cost to ship the package overnight: $" << calculateCost() << endl;
+	cout << endl;
+}
+
+// Method to calculate total revenue
+double Overnight::totalRevenue() {
+	double total;
+
+	total += calculateCost();
+
+	return total;
+}
+
+// Summary display method
+void Overnight::displaySummary() {
+	cout << "The total amount of money made from all overnight shipments is $" << totalRevenue() << endl;
+}
+]0;kljin@storm:~/cisc2000/labs/inheritance[kljin@storm inheritance]$ cat overnight.h
+// Program name: overnight.h
+#ifndef OVERNIGHT_H
+#define OVERNIGHT_H
+#include <iostream>
+#include "package.h"
+using namespace std;
+
+class Overnight:public Package {
+public:
+	static const int addFee = 3;
+	static double total;
+	
+	void input(); // Input method
+	double calculateCost(); // Method to calculate overnight cost
+	void display(); // Display method
+	double totalRevenue(); // Method to calculate total revenue
+	void displaySummary(); // Summary display method
+
+private:
+
+};
+
+#endif
+]0;kljin@storm:~/cisc2000/labs/inheritance[kljin@storm inheritance]$ cat package.cpp
+/* Program name: package.cpp
+ * By: Kai Li Jin
+ * Date: August 6, 2017
+ * Description: This is a base class which calls upon the customer class as well as prompts the user to enter the basic package information.
+ *
+ */
+#include "package.h"
+
+// Default constructor
+Package::Package() {
+	weight = 0;
+}	
+
+// Copy constructor
+Package::Package(Customer cu, double w, double c) { 
+	customer = cu;
+	weight = w;
+}
+
+// Input method
+void Package::input() {
+	double w;
+
+	customer.input();
+	cout << "Enter the weight of package (oz.): ";
+	cin >> w;
+	
+	setWeight(w);		
+
+}
+
+// Set method for weight
+void Package::setWeight(double w) {
+	if (w > 0.0001) {
+		weight = w;
+	}
+}
+
+// Get method for weight
+double Package::getWeight() {
+	return weight;
+}
+
+// Method to calculate cost of shipping
+double Package::calculateCost() {
+	double cost;
+
+	cost = getWeight() * fee;
+
+	return cost;
+}
+
+// Display method
+void Package::display() {
+	customer.display();
+	cout << endl;
+	cout << "----------Displaying package information----------" << endl;
+	cout << "Weight of package: " << getWeight() << " ounces" << endl;
+	cout << "Cost per ounce to ship the package: $" << calculateCost() << endl;
+}
+
+]0;kljin@storm:~/cisc2000/labs/inheritance[kljin@storm inheritance]$ cat package.h
+// Program name: package.h
+#ifndef PACKAGE_H
+#define PACKAGE_H
+#include <iostream>
+#include "customer.h"
+using namespace std;
+
+class Package {
+public:
+	static const int fee = 2;
+	static int cost;
+
+	Package(); // Default constructor 
+	Package(Customer, double, double); // Copy constructor
+	void input(); // Input method
+	void setWeight(double); // Set method for weight 
+	double getWeight(); // Get method for weight 
+	double calculateCost(); // Method to calculate cost
+	void display(); // Display method
+
+protected:
+	Customer customer;
+	double weight;
+};
+
+#endif
+]0;kljin@storm:~/cisc2000/labs/inheritance[kljin@storm inheritance]$ cat twoday.cpp
+/* Program name: twoday.cpp
+ * By: Kai Li Jin
+ * Date: August 6, 2017
+ * Description: This is a derived class from the base class (package.cpp). It adjusts the package cost by adding a flat fee for this type of shipment.
+ */
+#include "twoday.h"
+
+// Input method
+void twoDay::input() {
+	Package::input();
+}	
+
+// Method to calculate two day cost
+double twoDay::calculateCost() {
+	double cost;
+	int counter = 0;
+
+	cost = Package::calculateCost() + tdFee;
+
+	return cost;
+}
+
+// Display method
+void twoDay::display() {
+	Package::display();
+	cout << "Cost to ship the package in two days: $" << calculateCost() << endl;
+	cout << endl;
+}
+
+// Method to calculate total revenue
+double twoDay::totalRevenue() {
+	double total;
+		
+	total += calculateCost();
+
+	return total;
+}
+
+// Summary display method
+void twoDay::displaySummary() {
+	cout << "The total amount of money made from all two day shipments is $" << totalRevenue() << endl;
+}
+]0;kljin@storm:~/cisc2000/labs/inheritance[kljin@storm inheritance]$ cat twoday.h
+// Program name: twoday.h
+#ifndef TWODAY_H
+#define TWODAY_H
+#include <iostream>
+#include "package.h"
+using namespace std;
+
+class twoDay:public Package {
+public:
+	static const int tdFee = 3;
+	static double total;
+
+	void input(); // Input method 
+	double calculateCost(); // Method to calculate two day cost
+	void display(); // Display method
+	double totalRevenue(); // Method to calculate total revenue
+	void displaySummary(); // Summary display method
+
+private:
+	
+};
+
+#endif
+]0;kljin@storm:~/cisc2000/labs/inheritance[kljin@storm inheritance]$ cat driver.cpp
+/* Program name: driver.cpp
+ * By: Kai Li Jin
+ * Date: August 6, 2017
+ * Description: The driver file allows the user to choose which of the two derived classes to invoke and provides and option to quit. The program ends with a short summary/statistics of the shipments.
+ */
+#include "twoday.h"
+#include "overnight.h"
+
+int main() {
+	twoDay *tPtr = NULL;
+	Overnight *oPtr = NULL;
+	char answer;
+	int size;
+	static const int MAX = 100;
+	static int twoDayCount = 0, overnightCount = 0;
+	
+	do {
+		cout << endl;
+		cout << "Choose how you would like to ship your package: " << endl;
+		cout << "A. Two-day" << endl;
+		cout << "B. Overnight" << endl;
+		cout << "C. Exit" << endl;
+		cout << "Enter here: ";
+		cin >> answer;
+
+		switch (answer) {
+			case 'a':
+			case 'A':
+				cout << "Enter quantity of packages: ";
+				cin >> size;
+
+				if (size <= MAX) {
+					tPtr = new twoDay[size];
+
+					for (int i = 0; i < size; i++) {
+						tPtr[i].input();
+						twoDayCount++;
+					}
+			}
+			break;
+
+			case 'b':
+			case 'B':
+				cout << "Enter quantity of packages: ";
+				cin >> size;
+		
+				if (size <= MAX) {
+					oPtr = new Overnight[size];		
+
+					for (int i = 0; i < size; i++) {
+						oPtr[i].input();
+						overnightCount++;
+					}
+				}
+			break;
+
+			case 'c':
+			case 'C':
+				for (int i = 0; i < size; i++) {
+					cout << endl;
+					tPtr[i].display();
+					oPtr[i].display();
+					cout << endl;
+				
+					cout << "Total two day shipments: " << twoDayCount << endl;
+					cout << "Total overnight shipments: " << overnightCount << endl;
+					tPtr[i].displaySummary();
+					oPtr[i].displaySummary();
+				}
+			break;
+		}
+
+	} while (answer == 'a' || answer == 'A' || answer == 'b' || answer == 'B');
+	
+	delete [] tPtr;
+	tPtr = NULL;
+
+	delete [] oPtr;
+	oPtr = NULL;
+
+	cout << endl;
+	cout << "Have a nice day!" << endl;
+	
+	return 0;
+}
+]0;kljin@storm:~/cisc2000/labs/inheritance[kljin@storm inheritance]$ g++ *.cpp
+]0;kljin@storm:~/cisc2000/labs/inheritance[kljin@storm inheritance]$ ./a.out
+
+Choose how you would like to ship your package: 
+A. Two-day
+B. Overnight
+C. Exit
+Enter here: a
+Enter quantity of packages: 2
+
+----------Enter information----------
+Name (first, middle initial, last): Kai L Jin
+House number: 441 E Fordha           
+Street: E FOrdh    ordham Road
+City: Bronx
+State: NY
+Zip code: 10458
+Enter the weight of package (oz.): 1.03
+
+----------Enter information----------
+Name (first, middle initial, last): Jimmy H Jin
+House number: 4 52
+Street: W 48th St
+City: New York
+State: NY
+Zip code: 11013
+Enter the weight of package (oz.): 2.22
+
+Choose how you would like to ship your package: 
+A. Two-day
+B. Overnight
+C. Exit
+Enter here: b
+Enter quantity of packages: 2
+
+----------Enter information----------
+Name (first, middle initial, last): John R Smith
+House number: 103
+Street: Clinton Drive
+City: Chicago
+State: Illinois
+Zip code: 88045
+Enter the weight of package (oz.): 0.91
+
+----------Enter information----------
+Name (first, middle initial, last): J Rachel A Ruiz
+House number: 16 Hudson         
+Street: Hudson Ave
+City: Ridgefield Park
+State: NJ
+Zip code: 97642
+Enter the weight of package (oz.): 3.08
+
+Choose how you would like to ship your package: 
+A. Two-day
+B. Overnight
+C. Exit
+Enter here: c
+
+
+----------Displaying personal information----------
+Name: Kai L. Jin
+Address: 441 E Fordham Road
+Bronx, NY 10458
+
+----------Displaying package information----------
+Weight of package: 1.03 ounces
+Cost per ounce to ship the package: $2.06
+Cost to ship the package in two days: $5.06
+
+
+----------Displaying personal information----------
+Name: John R. Smith
+Address: 103 Clinton Drive
+Chicago, Illinois 88045
+
+----------Displaying package information----------
+Weight of package: 0.91 ounces
+Cost per ounce to ship the package: $1.82
+Cost to ship the package overnight: $5.46
+
+
+Total two day shipments: 2
+Total overnight shipments: 2
+The total amount of money made from all two day shipments is $5.06
+The total amount of money made from all overnight shipments is $5.46
+
+
+----------Displaying personal information----------
+Name: Jimmy H. Jin
+Address: 52 W 48th St
+New York, NY 11013
+
+----------Displaying package information----------
+Weight of package: 2.22 ounces
+Cost per ounce to ship the package: $4.44
+Cost to ship the package in two days: $7.44
+
+
+----------Displaying personal information----------
+Name: Rachel A. Ruiz
+Address: 16 Hudson Ave
+Ridgefield Park, NJ 97642
+
+----------Displaying package information----------
+Weight of package: 3.08 ounces
+Cost per ounce to ship the package: $6.16
+Cost to ship the package overnight: $18.48
+
+
+Total two day shipments: 2
+Total overnight shipments: 2
+The total amount of money made from all two day shipments is $7.44
+The total amount of money made from all overnight shipments is $18.48
+
+Have a nice day!
+]0;kljin@storm:~/cisc2000/labs/inheritance[kljin@storm inheritance]$ exit
+exit
+
+Script done on Sun 06 Aug 2017 09:16:44 PM EDT
